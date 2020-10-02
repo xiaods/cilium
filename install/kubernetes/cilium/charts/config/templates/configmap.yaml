@@ -417,6 +417,9 @@ data:
 {{- if .Values.global.iptablesLockTimeout }}
   iptables-lock-timeout: {{ .Values.global.iptablesLockTimeout | quote }}
 {{- end }}
+{{- if .Values.ipTablesRandomFully }}
+  iptables-random-fully: {{ .Values.ipTablesRandomFully | quote }}
+{{- end }}
   auto-direct-node-routes: {{ .Values.global.autoDirectNodeRoutes | quote }}
   enable-bandwidth-manager: {{ .Values.global.bandwidthManager | quote }}
 {{- if .Values.global.nativeRoutingCIDR }}
