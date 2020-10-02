@@ -610,3 +610,11 @@ global:
             values:
             - cilium
         topologyKey: "kubernetes.io/hostname"
+
+  # Setting priority class relies on .Capabilities object in our charts.
+  # This object is not available for manipulation for `helm template` calls,
+  # which causes .Capabilities to be filled according to version of k8s
+  # libraries that Helm was compiled against.
+  # This option allows to explicitly disable setting the priority class, which
+  # is useful for rendering charts for gke clusters in advance.
+  disableCriticalPriorityClass: false

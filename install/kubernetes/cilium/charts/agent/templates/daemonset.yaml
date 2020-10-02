@@ -364,7 +364,7 @@ spec:
           {{- toYaml .Values.initResources | trim | nindent 10 }}
 {{- end }}
       restartPolicy: Always
-{{- if or (and (eq .Release.Namespace "kube-system") (gt .Capabilities.KubeVersion.Minor "10")) (ge .Capabilities.KubeVersion.Minor "17") (gt .Capabilities.KubeVersion.Major "1")}}
+{{- if and (or (and (eq .Release.Namespace "kube-system") (gt .Capabilities.KubeVersion.Minor "10")) (ge .Capabilities.KubeVersion.Minor "17") (gt .Capabilities.KubeVersion.Major "1")) (not .Values.global.disableCriticalPriorityClass) }}
       priorityClassName: system-node-critical
 {{- end }}
       serviceAccount: cilium
