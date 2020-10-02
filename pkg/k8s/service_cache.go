@@ -168,7 +168,6 @@ func (s *ServiceCache) UpdateService(k8sSvc *slim_corev1.Service, swg *lock.Stop
 	if newService == nil {
 		return svcID
 	}
-	log.WithField(logfields.Object, logfields.Repr(*newService)).Debug("cilium service representation")
 
 	s.mutex.Lock()
 	defer s.mutex.Unlock()
