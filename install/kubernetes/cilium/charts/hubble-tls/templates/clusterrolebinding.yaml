@@ -1,0 +1,14 @@
+{{- if and .Values.global.hubble.tls.auto.enabled (eq .Values.global.hubble.tls.auto.method "cronJob") }}
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: hubble-generate-certs
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: hubble-generate-certs
+subjects:
+- kind: ServiceAccount
+  name: hubble-generate-certs-sa
+  namespace: {{ .Release.Namespace }}
+{{- end }}

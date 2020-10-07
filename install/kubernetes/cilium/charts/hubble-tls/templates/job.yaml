@@ -1,0 +1,10 @@
+{{- if and .Values.global.hubble.tls.auto.enabled (eq .Values.global.hubble.tls.auto.method "cronJob") }}
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: hubble-generate-certs
+  namespace: {{ .Release.Namespace }}
+  labels:
+    k8s-app: {{ .Chart.Name }}
+{{ include "hubble-generate-certs.job.spec" . }}
+{{- end }}

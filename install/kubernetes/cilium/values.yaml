@@ -532,8 +532,11 @@ global:
         # the certs for Hubble server need to be provided by setting
         # appropriate values in the hubble-tls chart.
         enabled: true
-        # Sets the method to auto-generate certificates. Currently, only "helm"
-        # is supported. This method uses Helm to generate certificates.
+        # Sets the method to auto-generate certificates. Supported values:
+        # - "helm":    This method uses Helm to generate all certificates.
+        # - "cronJob": This method uses a Kubernetes CronJob the generate any
+        #              certificates not provided by the user at installation
+        #              time.
         method: "helm"
         # Generated certificates validity duration in days.
         certValidityDuration: 1095

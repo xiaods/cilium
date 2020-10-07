@@ -1,6 +1,14 @@
-# base64 encoded PEM values for the hubble CA certificate
+# The certificate keypairs below must be provided if
+# global.hubble.tls.auto.enabled=false.
+
+# base64 encoded PEM values for the hubble CA certificate and private key.
 ca:
   crt:
+  # The CA private key optional. If it is provided, then it will be used by
+  # .global.hubble.tls.auto.method="cronJob" to generate all other certificates.
+  # Otherwise, if global.hubble.tls.auto.enabled=true, then a ephemeral CA is
+  # automatically generated.
+  key:
 # base64 encoded PEM values for the hubble server certificate and private key
 server:
   crt:
@@ -13,3 +21,27 @@ relay:
   server:
     crt:
     key:
+
+# If .global.hubble.tls.auto.method="cronJob", these options are used
+# for the Kubernetes CronJob which will be scheduled regularly to (re)generate
+# any certificates not provided manually below.
+cronJob:
+  # certgen image used in the job pod spec
+  image:
+    # repository of the docker image
+    repository: docker.io/cilium/certgen
+    # tag is the container image tag to use
+    tag: v0.1.0
+  # schedule of the recurring job which regenerates the certificates
+  # (regardless of their expiration date).
+  # If nil, then no recurring job will be created. Instead, the certificates are
+  # generated once at installation time.
+  #
+  # Defaults to midnight of the first day of every fourth month. For syntax, see
+  # https://kubernetes.io/docs/tasks/job/automated-tasks-with-cron-jobs/#schedule
+  schedule: "0 0 1 */4 *"
+  # Seconds after which the completed job pod will be deleted
+  ttlSecondsAfterFinished: 1800
+  # serviceAccount used by the job to store the keypairs as K8s secrets
+  serviceAccount:
+    annotations: {}
