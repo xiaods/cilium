@@ -268,6 +268,20 @@ var _ = Describe("K8sDatapathConfig", func() {
 					Should(BeTrue(), "Connectivity test to http://google.com failed")
 			}
 		})
+
+		It("Check iptables masquerading with random-fully", func() {
+			deploymentManager.DeployCilium(map[string]string{
+				"global.autoDirectNodeRoutes": "true",
+				"global.bpfMasquerade":        "false",
+				"config.ipTablesRandomFully":  "true",
+			}, DeployCiliumOptionsAndDNS)
+			Expect(testPodConnectivityAcrossNodes(kubectl)).Should(BeTrue(), "Connectivity test between nodes failed")
+
+			By("Test iptables masquerading")
+			Expect(testPodHTTPToOutside(kubectl, "http://google.com", false, false)).
+				Should(BeTrue(), "Connectivity test to http://google.com failed")
+			helpers.HoldEnvironment("Let's check if the flag is passed correctly")
+		})
 	})
 
 	Context("DirectRouting", func() {
